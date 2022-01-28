@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>ALEz - Create a New Claim and Worksheet</title>
+</head>
+<body>
+    <nav class="d-flex justify-content-between align-items-center col-12">
+        <img src="../static/img/ALEz Logo small.png" alt="ALEz Logo" class="rounded mx-5 d-block">
+        <div class="d-flex col-4 justify-content-around">
+            <a href="/dashboard" >Dashboard</a>
+            <a href="/logout" class="btn btn-secondary">Logout</a>
+        </div>
+    </nav>
+
+    <h1 class="text-center">Create a New Claim and ALE Worksheet</h1>
+
+
+    <form action='/worksheet/create' method="post" id=create_worksheet class="col-11 p-4 my-4 bg-light text-dark mx-auto">
+        {% with messages = get_flashed_messages(category_filter=['worksheet']) %}
+            {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                <strong>Alert!</strong>
+                    {% for message in messages %}
+                    <p>{{message}}</p>
+                    {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+        <div class="form-group">
+            <dl>
+                <dt>
+                <label for="claim_number">Claim Number:</label><br>
+                <input type="text" id="claim_number" name="claim_number"><br>
+                </dt>
+                <dt>
+                <label for="date_of_loss">Date of Loss:</label><br>
+                <input type="date" id="date_of_loss" name="date_of_loss"><br>
+                </dt>
+            </dl>
+        </div>
+        <div class="d-flex justify-content-around">
+            <div class='form-group'>
+                <h1>Normal Living Expenses</h1>
+                    <dl>
+                        <dt><label>Housing:</label></dt>
+                        <dd>
+                        <label for="normal_housing">-Rent- $</label>
+                        <input type="number" class="form-control nle" id="normal_housing" name="normal_housing" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+                        
+                        <dt><label>Utilities:</label></dt>
+                        <dd>
+                        <label for="normal_utilities_heat">-Heat- $</label>
+                        <input type="number" class="form-control nle" id="normal_utilities_heat" name="normal_utilities_heat" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dd>
+                        <label for="normal_utilities_electricity">-Electricity- $</label>
+                        <input type="number" class="form-control nle" id="normal_utilities_electricity" name="normal_utilities_electricity" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dd>
+                        <label for="normal_utilities_water">-Water- $</label>
+                        <input type="number" class="form-control nle" id="normal_utilities_water" name="normal_utilities_water" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dt><label>Food:</label></dt>
+                        <dd>
+                        <label for="normal_food_residence">-Residence Food Cost- $</label>
+                        <input type="number" class="form-control nle" id="normal_food_residence" name="normal_food_residence" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dd>
+                        <label for="normal_food_restaurant">-Motel/Restaurant- $</label>
+                        <input type="number" class="form-control nle" id="normal_food_restaurant" name="normal_food_restaurant" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dd>
+                        <label for="normal_food_other">-Other- $</label>
+                        <input type="number" class="form-control nle" id="normal_food_other" name="normal_food_other" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dt><label>Services:</label></dt>
+                        <dd>
+                        <label for="normal_services_laundry">-Laundry- $</label>
+                        <input type="number" class="form-control nle" id="normal_services_laundry" name="normal_services_laundry" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dd>
+                        <label for="normal_services_dry_cleaning">-Dry Cleaning- $</label>
+                        <input type="number" class="form-control nle" id="normal_services_dry_cleaning" name="normal_services_dry_cleaning" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dd>
+                        <label for="normal_services_other">-Other- $</label>
+                        <input type="number" class="form-control nle" id="normal_services_other" name="normal_services_other" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dt><label>Transportation:</label></dt>
+                        <dd>
+                        <label for="normal_transportation_gas">-Gas- $</label>
+                        <input type="number" class="form-control nle" id="normal_transportation_gas" name="normal_transportation_gas" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dd>
+                        <label for="normal_transportation_taxi">-Taxi- $</label>
+                        <input type="number" class="form-control nle" id="normal_transportation_taxi" name="normal_transportation_taxi" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dd>
+                        <label for="normal_transportation_rideshare">-Rideshare- $</label>
+                        <input type="number" class="form-control nle" id="normal_transportation_rideshare" name="normal_transportation_rideshare" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dt><label>Storage:</label></dt>
+                        <dd>
+                        <label for="normal_storage_unit">-Storage Unit- $</label>
+                        <input type="number" class="form-control nle" id="normal_storage_unit" name="normal_storage_unit" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dd>
+                        <label for="normal_storage_moving">-Moving- $</label>
+                        <input type="number" class="form-control nle" id="normal_storage_moving" name="normal_storage_moving" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dd>
+                        <label for="normal_storage_other">-Other- $</label>
+                        <input type="number" class="form-control nle" id="normal_storage_other" name="normal_storage_other" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                        </dd>
+
+                        <dt><label for="total_NLE">Total Normal Living Expense</label></dt>
+                        <input type="number" class="form-control" id="total_NLE" name="total_NLE" min="0" value="0.00" step="0.01" onchange="computeNLE()" required>
+                    </dl>
+            </div>
+
+            <div class='form-group'>
+                <h1>Additional Living Expenses</h1>
+                <dl>
+                    <dt><label>Housing:</label></dt>
+                    <dd>
+                    <label for="addtl_housing">-Rent- $</label>
+                    <input type="number" class="form-control ae" id="addtl_housing" name="addtl_housing" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+                    
+                    <dt><label>Utilities:</label></dt>
+                    <dd>
+                    <label for="addtl_utilities_heat">-Heat- $</label>
+                    <input type="number" class="form-control ae" id="addtl_utilities_heat" name="addtl_utilities_heat" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dd>
+                    <label for="addtl_utilities_electricity">-Electricity- $</label>
+                    <input type="number" class="form-control ae" id="addtl_utilities_electricity" name="addtl_utilities_electricity" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dd>
+                    <label for="addtl_utilities_water">-Water- $</label>
+                    <input type="number" class="form-control ae" id="addtl_utilities_water" name="addtl_utilities_water" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dt><label>Food:</label></dt>
+                    <dd>
+                    <label for="addtl_food_residence">-Residence Food Cost- $</label>
+                    <input type="number" class="form-control ae" id="addtl_food_residence" name="addtl_food_residence" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dd>
+                    <label for="addtl_food_restaurant">-Motel/Restaurant- $</label>
+                    <input type="number" class="form-control ae" id="addtl_food_restaurant" name="addtl_food_restaurant" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dd>
+                    <label for="addtl_food_other">-Other- $</label>
+                    <input type="number" class="form-control ae" id="addtl_food_other" name="addtl_food_other" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dt><label>Services:</label></dt>
+                    <dd>
+                    <label for="addtl_services_laundry">-Laundry- $</label>
+                    <input type="number" class="form-control ae" id="addtl_services_laundry" name="addtl_services_laundry" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dd>
+                    <label for="addtl_services_dry_cleaning">-Dry Cleaning- $</label>
+                    <input type="number" class="form-control ae" id="addtl_services_dry_cleaning" name="addtl_services_dry_cleaning" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dd>
+                    <label for="addtl_services_other">-Other- $</label>
+                    <input type="number" class="form-control ae" id="addtl_services_other" name="addtl_services_other" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dt><label>Transportation:</label></dt>
+                    <dd>
+                    <label for="addtl_transportation_gas">-Gas- $</label>
+                    <input type="number" class="form-control ae" id="addtl_transportation_gas" name="addtl_transportation_gas" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dd>
+                    <label for="addtl_transportation_taxi">-Taxi- $</label>
+                    <input type="number" class="form-control ae" id="addtl_transportation_taxi" name="addtl_transportation_taxi" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dd>
+                    <label for="addtl_transportation_rideshare">-Rideshare- $</label>
+                    <input type="number" class="form-control ae" id="addtl_transportation_rideshare" name="addtl_transportation_rideshare" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dt><label>Storage:</label></dt>
+                    <dd>
+                    <label for="addtl_storage_unit">-Storage Unit- $</label>
+                    <input type="number" class="form-control ae" id="addtl_storage_unit" name="addtl_storage_unit" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dd>
+                    <label for="addtl_storage_moving">-Moving- $</label>
+                    <input type="number" class="form-control ae" id="addtl_storage_moving" name="addtl_storage_moving" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dd>
+                    <label for="addtl_storage_other">-Other- $</label>
+                    <input type="number" class="form-control ae" id="addtl_storage_other" name="addtl_storage_other" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                    </dd>
+
+                    <dt><label for="total_AE">Total Addtl Living Expense</label></dt>
+                    <input type="number" class="form-control" id="total_AE" name="total_AE" min="0" value="0.00" step="0.01" onchange="computeAE()" required>
+                </dl>
+            </div>
+            <div class='form-group'>
+                <h1>Total ALE Claim</h1>
+                <dl>
+                    <dt><label>Total ALE Claim:</label></dt>
+                    <dd>
+                    <label for="total_ALE_claim">-Total ALE Claim- $</label>
+                    <input type="number" class="form-control" id="total_ALE_claim" name="total_ALE_claim" value="0.00" step="0.01" required readonly>
+                    </dd>
+                    <input type="submit" value="Submit Claim" class="btn btn-secondary" onclick='return confirm ("Did you Calculate your Total ALE before proceeding?");'>
+                    <input type="button" value="Calculate Total ALE" class="btn btn-secondary" onclick="computeALE()">
+                </dl>
+            </div>
+            <script src="../static/js/javascript.js"></script>
+        </form>
+
+    </div>
+</body>
+</html>
