@@ -20,3 +20,7 @@ Future Feature List:
 -upload a picture of the receipt. Have these all print as part of the PDF.
 -Include the date of the individual receipt when uploading and validate it against the date of loss.
 -Make it more mobile friendly (current version has big long forms - maybe break down by subcategory).
+
+Worksheet validations include: claim number must be longer than 2 characters, date of loss must be input, if additional food expense is entered into the form, but no normal expense is entered it throws a validation error, if total ALE claim is == 0, and if the total ALE claim is less than zero it throws a validation error.
+
+User validation is first name and last name must be longer than 2 characters, password must be at least 8 characters, password confirmation must match first pass on password, email must be unique, valid email address must be present. 
